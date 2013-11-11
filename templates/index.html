@@ -22,7 +22,8 @@
 
         <div class="form-group">
           <label for="rdf-content">RDF Content</label>
-          <textarea rows = "15" class="form-control" name = "rdf-content" id="rdf-content" placeholder="Enter valid RDF content here"></textarea> 
+          {{ load_form.rdf_content }}
+          {#<textarea rows = "15" name = "rdf-content" id="rdf-content" placeholder="Enter valid RDF content here"></textarea>#} 
         </div>
         <div class="form-group row">
           <div class="col-md-6">
@@ -30,16 +31,17 @@
           </div>
           <div class="col-md-6 text-right">
             <div class="btn-group" data-toggle="buttons">
-              <label class="type-selector btn btn-primary" id="xml">
+              <label class="load-type btn btn-primary" id="load-type-xml" value="xml">
                 <input type="radio">
                 XML
               </label>
-              <label class="type-selector btn btn-primary active" id="n3">
+              <label class="load-type btn btn-primary" id="load-type-n3" value="n3">
                 <input type="radio">
                 N3 / Turtle
               </label>
             </div>
-            <input id="rdf-type" name="rdf-type" type="hidden" value="n3"/>
+            {{ load_form.load_type }}
+            {#<input id="load-type" name="load-type" type="hidden" value="n3"/>#}
           </div>
         </div>
         <div class="form-group">
@@ -48,31 +50,32 @@
       </form>
     </div>
     <div class="col-md-6">
-      <h2>Query current RDF-database</h2>
+      <h2>Query current RDF database</h2>
       <form role = "form" action="{% reverse 'store.views.query' %}" method="POST">
         {% csrf_token %}
 
         <div class="form-group">
           <label for="rdf-query">SPARQL Query</label>
-          <textarea rows = "15" class="form-control" name = "rdf-query" id="rdf-query" placeholder="Enter valid SPARQL query here"></textarea> 
+          {{ query_form.rdf_query }}
         </div>
 
         <div class="form-group row">
           <div class="col-md-6">
-            <label for="rdfType">RDF Type</label>
+            <label for="rdfType">Output format</label>
           </div>
           <div class="col-md-6 text-right">
             <div class="btn-group" data-toggle="buttons">
-              <label class="output-type btn btn-primary active" id="xml">
+              <label class="output-type btn btn-primary" id="output-type-xml" value="xml">
                 <input type="radio">
                 XML
               </label>
-              <label class="output-type btn btn-primary" id="json">
+              <label class="output-type btn btn-primary" id="output-type-json" value="json">
                 <input type="radio">
                 JSON
               </label>
             </div>
-            <input id="output-type" name="output-type" type="hidden" value="xml"/>
+            {#<input id="output-type" name="output-type" type="hidden" value="xml"/>#}
+            {{ query_form.output_type }}
           </div>
         </div>
 
@@ -108,14 +111,23 @@
 {% block script %}
   <script type="text/javascript">
     $(function() {
-      $('.type-selector').click(function() {
-        var val = $(this).attr("id");
-        $("#rdf-type").attr("value", val);
+
+      $('.load-type').click(function() {
+        var val = $(this).attr("value");
+        $("#load-type").attr("value", val);
       });
       $('.output-type').click(function() {
-        var val = $(this).attr("id");
+        var val = $(this).attr("value");
         $("#output-type").attr("value", val);
       });
+
+
+      var curLoadType = $("#load-type").attr("value");
+      $('#load-type-' + curLoadType).addClass("active");
+
+      var curOutputType = $("#output-type").attr("value");
+      $('#output-type-' + curOutputType).addClass("active");
+
     });
   </script>
 {% endblock %}
