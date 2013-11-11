@@ -1,19 +1,22 @@
 from django import template
 import simplejson as json
+import xml.etree.ElementTree as ET
 
 register = template.Library()
 
 def parseXml(content):
+  content = content.replace("sparql:", "")
+  doc = ET.fromstring(content)
+
+  heads = [head.attrib.get("name") for head in doc.findall(".//head/variable")]
+
+  values = []
+  for res in doc.findall(".//results/result"):
+    values.append([res.find("*[@name='%s']/" %(head)).text for head in heads])
+    
   return {
-    "heads":["1", "2"],
-    "values": [
-      ["a", "b"],
-      ["a", "b"],
-      ["a", "b"],
-      ["a", "b"],
-      ["a", "b"],
-      ["a", "b"],
-    ]
+    "heads": heads,
+    "values": values
   }
 
 def parseJson(content):
