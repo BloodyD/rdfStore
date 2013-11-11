@@ -1,12 +1,13 @@
-from rdf_store.decorators import render_to
 from django.http import HttpResponseRedirect, Http404
 from django.contrib import messages
 from django.core.urlresolvers import reverse
 
-from store import RDFStorage
-from store.forms import LoadForm, QueryForm
 from xml.dom import minidom
 import simplejson as json
+
+from rdf_store.decorators import render_to
+from store import RDFStorage
+from store.forms import LoadForm, QueryForm
 
 
 INDEX = HttpResponseRedirect("/")
@@ -32,7 +33,7 @@ def query(request):
         stringResult = xml.toprettyxml()
       elif format == "json":
         stringResult = json.dumps(json.loads(stringResult), sort_keys = False, indent = 4)
-      result.update({"result" : stringResult})
+      result.update({"result" : stringResult, "format":format})
     except Exception, e:
       result.update({"exception" : e})
 
@@ -58,3 +59,4 @@ def load(request):
       result.update({"exception": e})
 
   return result
+

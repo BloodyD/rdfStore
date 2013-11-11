@@ -1,0 +1,21 @@
+<table class="table table-striped">
+  <thead>
+    <tr>
+      {% for head in heads %}
+        <th>{{head}}</th>
+      {% endfor %}
+    </tr>
+  </thead>
+  <tbody>
+    {% if values %}
+      {% for val in values %}
+        <tr>
+          {% for data in val %}
+            <td>{{data}}</td>
+          {% endfor %}
+        </tr>
+      {% endfor %}
+    {% else %}
+    {% endif %}
+  </tbody>
+</table>

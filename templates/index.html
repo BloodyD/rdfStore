@@ -1,5 +1,6 @@
 {% extends "base.html" %}
 {% load reversetag %}
+{% load inclusions %}
 
 {%block head%}
   <style type="text/css">
@@ -100,7 +101,20 @@
       {% if result %}
         <h3>Result:</h3>
         <div id="rdf-query-result" class="col-md-12">
-          <pre>{{ result }}</pre>
+          <ul class="nav nav-tabs">
+            <li class="active"><a href="#raw" data-toggle="tab">Raw</a></li>
+            <li><a href="#table" data-toggle="tab">Table</a></li>
+          </ul>
+
+          <!-- Tab panes -->
+          <div class="tab-content">
+            <div class="tab-pane active" id="raw">
+              <pre>{{ result }}</pre>
+            </div>
+            <div class="tab-pane" id="table">
+              {% show_result content=result format=format %}
+            </div>
+          </div>
         </div>
       {% endif %}
     </div>
